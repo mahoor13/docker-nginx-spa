@@ -1,0 +1,9 @@
+services:
+  spa:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./dist:/app
