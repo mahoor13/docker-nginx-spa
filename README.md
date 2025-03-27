@@ -108,5 +108,5 @@ docker-compose up -d
 Contributions, issues, and feature requests are welcome!
 
 ## License
-[Your License - e.g., MIT]
+[MIT]
 ```
