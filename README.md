@@ -26,44 +26,12 @@ your-project/
 │       ├── Dockerfile
 │       └── nginx.conf
 │
-├── dist/           # Your SPA build output
+├── dist/           # SPA build output
 │
 └── docker-compose.yml
 ```
 
-### 2. Dockerfile
-```dockerfile
-FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY dist /app
-EXPOSE 80
-```
-
-### 3. Nginx Configuration
-```nginx
-events {
-    worker_connections 1024;
-}
-
-server {
-    listen       80;
-    server_name  localhost;
-    
-    location / {
-        root   /app;
-        index  index.html;
-        try_files $uri $uri/ /index.html;
-    }
-    
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
-}
-
-```
-
-### 4. Docker Compose
+### 2. Docker Compose
 ```yaml
 services:
   spa:
@@ -71,7 +39,7 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - ./dist:/app
 ```
@@ -89,7 +57,7 @@ docker-compose up -d
 ```
 
 ## Performance Optimization
-- Uses Alpine Linux for minimal image size
+- Uses Alpine Linux for minimal image size (final image is under 50Mb.)
 - Enables gzip compression
 - Configures proper caching headers
 - Supports client-side routing
