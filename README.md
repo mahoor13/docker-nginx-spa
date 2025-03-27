@@ -35,7 +35,7 @@ your-project/
 ```dockerfile
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY dist /usr/share/nginx/html
+COPY dist /app
 EXPOSE 80
 ```
 
@@ -45,26 +45,26 @@ events {
     worker_connections 1024;
 }
 
-http {
-    server {
-        listen 80;
-        root /usr/share/nginx/html;
-        index index.html;
-
-        location / {
-            try_files $uri $uri/ /index.html;
-        }
-
-        # Optional: Enable gzip compression
-        gzip on;
-        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+server {
+    listen       80;
+    server_name  localhost;
+    
+    location / {
+        root   /app;
+        index  index.html;
+        try_files $uri $uri/ /index.html;
+    }
+    
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
     }
 }
+
 ```
 
 ### 4. Docker Compose
 ```yaml
-version: '3.8'
 services:
   spa:
     build:
@@ -73,7 +73,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./dist:/usr/share/nginx/html
+      - ./dist:/app
 ```
 
 ## Deployment Commands
